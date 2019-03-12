@@ -10,12 +10,23 @@ use Daniser\InquiryDispenser\TrackPeriod;
  */
 trait Tracked
 {
+    use HasEvents;
+
     /**
      * @return FactorTrack|TrackPeriod[]
      */
     public function track()
     {
         return new FactorTrack($this);
+    }
+
+    public function checkout()
+    {
+        if ($this->active !== $this->track->getLastState()) {
+            $this->fireFactorEvent($this->active ? 'activating' : 'deactivating', false);
+            $this->track->snapshot(true);
+            $this->fireFactorEvent($this->active ? 'activated' : 'deactivated', false);
+        }
     }
 
     protected function periodActive()

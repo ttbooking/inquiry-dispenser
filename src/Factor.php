@@ -3,6 +3,7 @@
 namespace Daniser\InquiryDispenser;
 
 use DateTimeInterface as DateTime;
+use Cache;
 
 /**
  * Class Factor
@@ -28,11 +29,31 @@ abstract class Factor implements Contracts\Factor, \ArrayAccess
     {
         $this->subject = $subject;
         $this->setQueryTime($queryTime);
+        $this->checkout();
     }
 
     public function active()
     {
         return true;
+    }
+
+    protected function signature()
+    {
+        static $signature;
+        if (!isset($signature)) $signature = md5(serialize($this));
+        return $signature;
+    }
+
+    public function checkout()
+    {
+        $lastState = Cache::store('database')->get($this->signature());
+        $state = $this->active;
+
+        if (is_null($lastState) || $state !== $lastState) {
+            $this->fireFactorEvent($state ? 'activating' : 'deactivating', false);
+            Cache::store('database')->put($this->signature(), $state);
+            $this->fireFactorEvent($state ? 'activated' : 'deactivated', false);
+        }
     }
 
     final public function getQueryTime()

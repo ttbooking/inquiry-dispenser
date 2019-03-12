@@ -40,18 +40,23 @@ class FactorTrack extends Collection implements Contracts\FactorTrack
         return $signature;
     }
 
-    public function snapshot($force = false)
+    public function getLastState()
     {
         $instance = $this->factorSignature();
-        $active = $this->factor->active;
+        $result = $this->query->where('instance', $instance)->orderByDesc('tracked_at')->first(['active']);
+        return (bool)data_get($result, 'active', false);
+    }
 
+    public function snapshot($force = false)
+    {
         if (!$force) {
-            $result = $this->query->where('instance', $instance)->orderByDesc('tracked_at')->first(['active']);
-            $lastActive = (bool)data_get($result, 'active', false);
-            $force = $active !== $lastActive;
+            $force = $this->factor->active !== $this->getLastState();
         }
 
-        if ($force) $this->query->insert(compact('instance', 'active'));
+        if ($force) $this->query->insert([
+            'instance' => $this->factorSignature(),
+            'active' => $this->factor->active,
+        ]);
     }
 
     public function getSecondsActive()

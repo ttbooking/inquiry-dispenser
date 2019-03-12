@@ -2,13 +2,13 @@
 
 namespace Daniser\InquiryDispenser;
 
-use Serializable;
-
 /**
  * @property-read Contracts\Inquiry $inquiry
  */
-abstract class InquiryFactor extends Factor implements Serializable
+abstract class InquiryFactor extends Factor implements Contracts\TrackedFactor
 {
+    use Concerns\Tracked;
+
     /** @var Contracts\Inquiry $subject */
     protected $subject;
 
