@@ -4,7 +4,13 @@ namespace Daniser\InquiryDispenser\Contracts;
 
 interface FactorTrack
 {
-    function snapshot();
+    /**
+     * Save current factor state into storage
+     *
+     * @param bool $force
+     * @return void
+     */
+    function snapshot($force = false);
 
     function getSecondsActive();
 }
