@@ -2,7 +2,12 @@
 
 namespace Daniser\InquiryDispenser;
 
-abstract class Inquiry implements Contracts\Inquiry, Contracts\Parameterizable, Contracts\Comparable, \Serializable
+use Daniser\InquiryDispenser\Contracts\Inquiry as InquiryContract;
+use Daniser\InquiryDispenser\Contracts\TrackedParameterizable;
+use Daniser\InquiryDispenser\Contracts\Comparable;
+use Serializable;
+
+abstract class Inquiry implements InquiryContract, TrackedParameterizable, Comparable, Serializable
 {
     use Concerns\Parameterized;
 

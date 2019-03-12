@@ -2,6 +2,8 @@
 
 namespace Daniser\InquiryDispenser\Contracts;
 
+use Illuminate\Support\Collection;
+
 interface Parameterizable
 {
     /**
@@ -15,9 +17,8 @@ interface Parameterizable
     /**
      * Get parameterizable object trait(s).
      *
-     * @param string|string[] ...$traits
-     * @return int|int[]
-     * @throws \Daniser\InquiryDispenser\Exceptions\ClassMismatchException
+     * @param string[]|string ...$traits
+     * @return Collection|mixed[]|mixed
      */
     function get(...$traits);
 }

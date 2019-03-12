@@ -9,21 +9,8 @@ use Serializable;
  */
 abstract class InquiryFactor extends Factor implements Serializable
 {
-    /** @var Contracts\Inquiry $inquiry */
-    protected $inquiry;
-
-    /**
-     * @param Contracts\Inquiry $inquiry
-     */
-    public function __construct(Contracts\Inquiry $inquiry)
-    {
-        $this->inquiry = $inquiry;
-    }
-
-    /*public function __sleep()
-    {
-        return ['inquiry'];
-    }*/
+    /** @var Contracts\Inquiry $subject */
+    protected $subject;
 
     public function serialize()
     {
@@ -40,7 +27,7 @@ abstract class InquiryFactor extends Factor implements Serializable
      */
     public function inquiry()
     {
-        return $this->inquiry;
+        return $this->subject;
     }
 
     /**
@@ -48,7 +35,7 @@ abstract class InquiryFactor extends Factor implements Serializable
      */
     protected function periodActive()
     {
-        return time() - $this->inquiry->getDateTime()->getTimestamp();
+        return $this->getQueryTime()->getTimestamp() - $this->inquiry->getDateTime()->getTimestamp();
     }
 
     /**

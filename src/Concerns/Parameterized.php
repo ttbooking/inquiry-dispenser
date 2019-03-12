@@ -2,6 +2,7 @@
 
 namespace Daniser\InquiryDispenser\Concerns;
 
+use DateTimeInterface as DateTime;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use Daniser\InquiryDispenser\Contracts;
@@ -32,22 +33,24 @@ trait Parameterized
     protected static $filter = '';
 
     /**
+     * @param DateTime|null $queryTime
      * @return Collection|Contracts\Factor[]
      */
-    public function factors()
+    public function factors(DateTime $queryTime = null)
     {
-        return collect($this->factors)->map(function ($factor) {
-            return new $factor($this);
+        return collect($this->factors)->map(function ($factor) use ($queryTime) {
+            return new $factor($this, $queryTime);
         });
     }
 
     /**
      * @param string $name
+     * @param DateTime|null $queryTime
      * @return Contracts\Factor
      */
-    public function factor($name)
+    public function factor($name, DateTime $queryTime = null)
     {
-        return $this->factors()[$name];
+        return $this->factors($queryTime)[$name];
     }
 
     /**
@@ -96,41 +99,27 @@ trait Parameterized
         });
     }
 
-    public function fireObservers()
+    /*public function fireObservers()
     {
         foreach ($this->factors() as $name => $factor) {
-            /** @var Factor $factor */
+            @var Factor $factor
             $factor = new $factor($this);
             $factor->notify($this, $factor->active());
         }
-    }
+    }*/
 
-    /**
-     * @param string|string[] ...$factors
-     * @return bool
-     */
-    final public function is(...$factors)
+    final public function was($factors, DateTime $queryTime = null)
     {
-        if (isset($factors[0]) && is_array($factors[0])) $factors = $factors[0];
-        return array_reduce($factors, function ($is, $_factor) {
+        return array_reduce((array)$factors, function ($was, $_factor) use ($queryTime) {
             $inv = $_factor !== ($factor = ltrim($_factor, '!'));
-            return $inv xor $is
+            return $inv xor $was
                 && array_key_exists($factor, $this->factors())
-                && $this->factor($factor)->active();
+                && $this->factor($factor, $queryTime)->active();
         }, true);
     }
 
-    /**
-     * @param string[]|string ...$traits
-     * @return Collection|mixed[]|mixed
-     */
-    final public function get(...$traits)
+    final public function getAsOf($traits, DateTime $queryTime = null)
     {
-        $scalarResult = false;
-
-        if (isset($traits[0]) && is_array($traits[0])) $traits = $traits[0];
-        elseif (count($traits) === 1) $scalarResult = true;
-
         if (empty($traits)) $traits = $this->traits()->keys();
 
         // journey begins...
@@ -140,10 +129,10 @@ trait Parameterized
             $this->traits()->only($traits)
 
             // calculate trait values via reduction
-            ->map(function ($reduction, $trait) {
+            ->map(function ($reduction, $trait) use ($queryTime) {
 
                 // apply factors to subject
-                return $this->factors()
+                return $this->factors($queryTime)
 
                     // leave only ones that affect given trait
                     ->filter(function (Factor $factor) use ($trait) {
@@ -167,6 +156,25 @@ trait Parameterized
 
                     );
             });
+
+        return is_array($traits) ? $result : $result->first();
+    }
+
+    final public function is(...$factors)
+    {
+        if (isset($factors[0]) && is_array($factors[0])) $factors = $factors[0];
+
+        return $this->was($factors);
+    }
+
+    final public function get(...$traits)
+    {
+        $scalarResult = false;
+
+        if (isset($traits[0]) && is_array($traits[0])) $traits = $traits[0];
+        elseif (count($traits) === 1) $scalarResult = true;
+
+        $result = $this->getAsOf($traits);
 
         return $scalarResult ? $result->first() : $result;
     }

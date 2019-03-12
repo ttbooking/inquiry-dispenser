@@ -7,19 +7,14 @@ namespace Daniser\InquiryDispenser;
  */
 abstract class MatchFactor extends Factor
 {
-    /** @var Contracts\Match $match */
-    protected $match;
-
-    public function __construct(Contracts\Match $match)
-    {
-        $this->match = $match;
-    }
+    /** @var Contracts\Match $subject */
+    protected $subject;
 
     /**
      * @return Contracts\Match
      */
     public function match()
     {
-        return $this->match;
+        return $this->subject;
     }
 }

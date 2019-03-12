@@ -2,6 +2,8 @@
 
 namespace Daniser\InquiryDispenser;
 
+use DateTimeInterface as DateTime;
+
 /**
  * Class Factor
  * @package InquiryDispenser
@@ -12,9 +14,41 @@ abstract class Factor implements Contracts\Factor, \ArrayAccess
 {
     use Concerns\HasEvents;
 
+    /** @var Contracts\Parameterizable $subject */
+    protected $subject;
+
+    /** @var DateTime|null $queryTime */
+    protected $queryTime;
+
+    /**
+     * @param Contracts\Parameterizable $subject
+     * @param DateTime|null $queryTime
+     */
+    public function __construct(Contracts\Parameterizable $subject, DateTime $queryTime = null)
+    {
+        $this->subject = $subject;
+        $this->setQueryTime($queryTime);
+    }
+
     public function active()
     {
         return true;
+    }
+
+    final public function getQueryTime()
+    {
+        return isset($this->queryTime) ? $this->queryTime : date_create();
+    }
+
+    final public function setQueryTime(DateTime $queryTime = null)
+    {
+        $this->queryTime = $queryTime;
+        return $this;
+    }
+
+    final public function resetQueryTime()
+    {
+        return $this->setQueryTime();
     }
 
     final public function __isset($name)
