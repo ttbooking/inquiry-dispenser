@@ -99,14 +99,15 @@ trait Parameterized
         });
     }
 
-    /*public function fireObservers()
+    public static function checkout()
     {
-        foreach ($this->factors() as $name => $factor) {
-            @var Factor $factor
-            $factor = new $factor($this);
-            $factor->notify($this, $factor->active());
-        }
-    }*/
+        foreach (static::all() as $inquiry) $inquiry->fireFactorEvents();
+    }
+
+    public function fireFactorEvents()
+    {
+        foreach ($this->factors() as $factor) $factor->checkout();
+    }
 
     final public function was($factors, DateTime $queryTime = null)
     {

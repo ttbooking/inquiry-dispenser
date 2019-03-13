@@ -12,6 +12,11 @@ interface Factor
     function active();
 
     /**
+     * @return void
+     */
+    function checkout();
+
+    /**
      * @return DateTime
      */
     function getQueryTime();
