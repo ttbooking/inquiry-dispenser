@@ -21,6 +21,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
     public function boot()
     {
         Factor::setEventDispatcher($this->app['events']);
+        Factor::observe(Observers\TrackFactorState::class);
 
         $this->publishes([
             __DIR__.'/../config/dispenser.php' => $this->app->configPath('dispenser.php'),

@@ -3,7 +3,7 @@
 namespace TTBooking\InquiryDispenser;
 
 use DateTimeInterface as DateTime;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class Factor
@@ -46,12 +46,12 @@ abstract class Factor implements Contracts\Factor, \ArrayAccess
 
     public function checkout()
     {
-        $lastState = Cache::store('database')->get($this->signature());
+        $lastState = Cache::get($this->signature());
         $state = $this->active;
 
         if (is_null($lastState) || $state !== $lastState) {
             $this->fireFactorEvent($state ? 'activating' : 'deactivating', false);
-            Cache::store('database')->put($this->signature(), $state);
+            Cache::forever($this->signature(), $state);
             $this->fireFactorEvent($state ? 'activated' : 'deactivated', false);
         }
     }
