@@ -1,13 +1,13 @@
 <?php
 
-namespace Daniser\InquiryDispenser\Concerns;
+namespace TTBooking\InquiryDispenser\Concerns;
 
 use DateTimeInterface as DateTime;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
-use Daniser\InquiryDispenser\Contracts;
-use Daniser\InquiryDispenser\Factor;
-use Daniser\InquiryDispenser\Reduce;
+use TTBooking\InquiryDispenser\Contracts;
+use TTBooking\InquiryDispenser\Factor;
+use TTBooking\InquiryDispenser\Reduce;
 
 trait Parameterized
 {

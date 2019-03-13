@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser\Concerns;
+namespace TTBooking\InquiryDispenser\Concerns;
 
 use Illuminate\Contracts\Events\Dispatcher;
 

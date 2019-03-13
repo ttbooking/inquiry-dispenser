@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser\Console;
+namespace TTBooking\InquiryDispenser\Console;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;

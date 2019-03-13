@@ -1,9 +1,9 @@
 <?php
 
-namespace Daniser\InquiryDispenser\Concerns;
+namespace TTBooking\InquiryDispenser\Concerns;
 
-use Daniser\InquiryDispenser\FactorTrack;
-use Daniser\InquiryDispenser\TrackPeriod;
+use TTBooking\InquiryDispenser\FactorTrack;
+use TTBooking\InquiryDispenser\TrackPeriod;
 
 /**
  * @property-read FactorTrack|TrackPeriod[] $track

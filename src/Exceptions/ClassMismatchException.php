@@ -1,5 +1,5 @@
 <?php
 
-namespace Daniser\InquiryDispenser\Exceptions;
+namespace TTBooking\InquiryDispenser\Exceptions;
 
 class ClassMismatchException extends \Exception {}

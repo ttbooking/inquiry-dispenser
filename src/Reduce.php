@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser;
+namespace TTBooking\InquiryDispenser;
 
 class Reduce
 {

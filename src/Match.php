@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser;
+namespace TTBooking\InquiryDispenser;
 
 abstract class Match implements Contracts\Match, Contracts\Parameterizable, Contracts\Comparable
 {

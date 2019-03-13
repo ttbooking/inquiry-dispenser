@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser\Contracts;
+namespace TTBooking\InquiryDispenser\Contracts;
 
 interface Suggestion
 {

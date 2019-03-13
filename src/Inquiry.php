@@ -1,10 +1,10 @@
 <?php
 
-namespace Daniser\InquiryDispenser;
+namespace TTBooking\InquiryDispenser;
 
-use Daniser\InquiryDispenser\Contracts\Inquiry as InquiryContract;
-use Daniser\InquiryDispenser\Contracts\TrackedParameterizable;
-use Daniser\InquiryDispenser\Contracts\Comparable;
+use TTBooking\InquiryDispenser\Contracts\Inquiry as InquiryContract;
+use TTBooking\InquiryDispenser\Contracts\TrackedParameterizable;
+use TTBooking\InquiryDispenser\Contracts\Comparable;
 use Serializable;
 
 abstract class Inquiry implements InquiryContract, TrackedParameterizable, Comparable, Serializable

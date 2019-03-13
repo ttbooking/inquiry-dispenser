@@ -1,11 +1,11 @@
 {
-    "name": "daniser/inquiry-dispenser",
+    "name": "ttbooking/inquiry-dispenser",
     "description": "Abstraction layer for factor-based distribution of incoming user inquiries across operators",
     "license": "MIT",
     "authors": [
         {
             "name": "Sergey Danilchenko",
-            "email": "daniser@mail.ru"
+            "email": "s.danilchenko@ttbooking.ru"
         }
     ],
     "require": {
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Daniser\\InquiryDispenser\\": "src/"
+            "TTBooking\\InquiryDispenser\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Daniser\\InquiryDispenser\\InquiryDispenserServiceProvider"
+                "TTBooking\\InquiryDispenser\\InquiryDispenserServiceProvider"
             ]
         }
     }

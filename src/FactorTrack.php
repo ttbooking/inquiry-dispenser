@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser;
+namespace TTBooking\InquiryDispenser;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;

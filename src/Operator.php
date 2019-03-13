@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniser\InquiryDispenser;
+namespace TTBooking\InquiryDispenser;
 
 abstract class Operator implements Contracts\Operator, Contracts\Parameterizable, Contracts\Comparable
 {
