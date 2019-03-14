@@ -3,6 +3,8 @@
 namespace TTBooking\InquiryDispenser;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Console\Scheduling\Event;
 
 class InquiryDispenserServiceProvider extends ServiceProvider
 {
@@ -23,9 +25,25 @@ class InquiryDispenserServiceProvider extends ServiceProvider
         Factor::setEventDispatcher($this->app['events']);
         Factor::observe(Observers\TrackFactorState::class);
 
-        $this->publishes([
-            __DIR__.'/../config/dispenser.php' => $this->app->configPath('dispenser.php'),
-        ], 'dispenser:config');
+        if ($this->app->runningInConsole()) {
+
+            $this->app->booted(function () {
+
+                /** @var Schedule $schedule */
+                $schedule = $this->app->make(Schedule::class);
+
+                $event = $schedule->command('dispenser:dispense')->withoutOverlapping();
+                config('dispenser.schedule', function (Event $event) {
+                    $event->everyMinute();
+                })($event);
+
+            });
+
+            $this->publishes([
+                __DIR__.'/../config/dispenser.php' => $this->app->configPath('dispenser.php'),
+            ], 'dispenser:config');
+
+        }
     }
 
     /**
@@ -35,11 +53,18 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('command.dispenser.dispense', function () {
+            return new Console\DispenseCommand;
+        });
+
         $this->app->singleton('command.dispenser.track-table', function ($app) {
             return new Console\TrackTableCommand($app['files'], $app['composer']);
         });
 
-        $this->commands('command.dispenser.track-table');
+        $this->commands([
+            'command.dispenser.dispense',
+            'command.dispenser.track-table',
+        ]);
     }
 
     /**
@@ -49,6 +74,9 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['command.dispenser.track-table'];
+        return [
+            'command.dispenser.dispense',
+            'command.dispenser.track-table',
+        ];
     }
 }

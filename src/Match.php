@@ -2,6 +2,8 @@
 
 namespace TTBooking\InquiryDispenser;
 
+use Illuminate\Support\Collection;
+
 abstract class Match implements Contracts\Match, Contracts\Parameterizable, Contracts\Comparable
 {
     use Concerns\Parameterized;
@@ -39,12 +41,24 @@ abstract class Match implements Contracts\Match, Contracts\Parameterizable, Cont
         return $this->operator;
     }
 
-    protected static function all()
+    /**
+     * @param Collection|Inquiry[]|Inquiry|null $inquiries
+     * @param Collection|Operator[]|Operator|null $operators
+     * @return Collection|static[]
+     */
+    public static function from($inquiries = null, $operators = null)
     {
-        return Inquiry::applicable()->crossJoin(Operator::applicable())
+        if (is_null($inquiries)) $inquiries = Inquiry::applicable();
+        if (is_null($operators)) $operators = Operator::applicable();
+        return collect($inquiries)->crossJoin(collect($operators))
             ->map(function (array $match) {
                 return new static($match[0], $match[1]);
             });
+    }
+
+    public static function all()
+    {
+        return static::from();
     }
 
     final public function marry()

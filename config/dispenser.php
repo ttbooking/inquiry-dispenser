@@ -2,6 +2,10 @@
 
 return [
 
+    'schedule' => function (\Illuminate\Console\Scheduling\Event $event) {
+        $event->everyMinute();
+    },
+
     'connections' => [
 
         'database' => [
