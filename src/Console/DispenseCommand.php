@@ -3,9 +3,8 @@
 namespace TTBooking\InquiryDispenser\Console;
 
 use Illuminate\Console\Command;
-//use TTBooking\InquiryDispenser\MatchFactory;
+use TTBooking\InquiryDispenser\Contracts\InquiryRepository;
 use TTBooking\InquiryDispenser\Match;
-use TTBooking\InquiryDispenser\Inquiry;
 
 class DispenseCommand extends Command
 {
@@ -27,17 +26,19 @@ class DispenseCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param InquiryRepository $inquiryRepository
      * @return void
      */
-    public function handle()
+    public function handle(InquiryRepository $inquiryRepository)
     {
-        /*$matches = $this->laravel->make(MatchFactory::class);
-        foreach ($matches->applicable() as $match) {
-            $match->marry();
-        }*/
-        $inquiries = array_map(function ($inquiryId) {
-            return Inquiry::fromId($inquiryId);
-        }, $this->argument('inquiry'));
+        $inquiryIds = collect($this->argument('inquiry'));
+
+        $inquiries = $inquiryIds->isEmpty()
+            ? $inquiryRepository->all()
+            : $inquiryIds->map(function ($inquiryId) use ($inquiryRepository) {
+                return $inquiryRepository->get($inquiryId);
+            });
+
         foreach (Match::from($inquiries) as $match) {
             $match->marry();
         }

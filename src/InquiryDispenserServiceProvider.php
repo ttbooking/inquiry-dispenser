@@ -53,6 +53,8 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(Contracts\MatchRepository::class, MatchRepository::class);
+
         $this->app->singleton('command.dispenser.dispense', function () {
             return new Console\DispenseCommand;
         });

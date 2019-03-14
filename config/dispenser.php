@@ -6,6 +6,12 @@ return [
         $event->everyMinute();
     },
 
+    'narrowers' => [
+        'inquiry' => '!bound',
+        'operator' => 'free',
+        'match' => 'valid',
+    ],
+
     'connections' => [
 
         'database' => [
