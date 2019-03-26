@@ -29,6 +29,11 @@ abstract class Subject implements SubjectContract
     /** @var mixed $defaultTraitValue */
     protected $defaultTraitValue = 0;
 
+    public function __construct()
+    {
+        $this->factors();
+    }
+
     /**
      * @param DateTimeInterface|null $queryTime
      * @return Collection|Factor[]
