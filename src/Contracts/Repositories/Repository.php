@@ -2,6 +2,7 @@
 
 namespace TTBooking\InquiryDispenser\Contracts\Repositories;
 
+use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Exceptions\ItemNotFoundException;
 
 interface Repository
@@ -14,7 +15,7 @@ interface Repository
     public function get($id);
 
     /**
-     * @return array
+     * @return Collection
      */
     public function all();
 }

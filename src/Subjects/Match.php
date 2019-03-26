@@ -45,27 +45,23 @@ class Match extends Subject implements MatchContract
     }
 
     /**
-     * @param Collection|Inquiry[]|Inquiry|null $inquiries
-     * @param Collection|Operator[]|Operator|null $operators
      * @return Collection|static[]
      */
-    public static function from($inquiries = null, $operators = null)
+    public static function all()
     {
-        if (is_null($inquiries)) {
-            $inquiries = collect(app(InquiryRepository::class)->all())
-                ->filter(function (Inquiry $inquiry) {
-                    return $inquiry->is(config('dispenser.narrowers.inquiry'));
-                });
-        }
+        /** @var Collection|Inquiry[] $inquiries */
+        $inquiries = app(InquiryRepository::class)->all()
+            ->filter(function (Inquiry $inquiry) {
+                return $inquiry->is(config('dispenser.narrowers.inquiry'));
+            });
 
-        if (is_null($operators)) {
-            $operators = collect(app(OperatorRepository::class)->all())
-                ->filter(function (Operator $operator) {
-                    return $operator->is(config('dispenser.narrowers.operator'));
-                });
-        }
+        /** @var Collection|Operator[] $operators */
+        $operators = app(OperatorRepository::class)->all()
+            ->filter(function (Operator $operator) {
+                return $operator->is(config('dispenser.narrowers.operator'));
+            });
 
-        return collect($inquiries)->crossJoin(collect($operators))
+        return $inquiries->crossJoin($operators)
             ->map(function (array $match) {
                 return new static($match[0], $match[1]);
             })->filter(function (self $match) {

@@ -7,12 +7,11 @@ use Illuminate\Console\Command;
 class CheckoutCommand extends Command
 {
     /**
-     * The name and signature of the console command.
+     * The console command name.
      *
      * @var string
      */
-    protected $signature = 'dispenser:checkout
-        {inquiry* : Space-separated list of inquiry identifiers to checkout}';
+    protected $name = 'dispenser:checkout';
 
     /**
      * The console command description.
