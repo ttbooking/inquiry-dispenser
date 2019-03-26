@@ -1,15 +1,15 @@
 <?php
 
-namespace TTBooking\InquiryDispenser;
+namespace TTBooking\InquiryDispenser\Factors;
+
+use TTBooking\InquiryDispenser\Contracts\Subjects\Inquiry;
 
 /**
- * @property-read Contracts\Inquiry $inquiry
+ * @property-read Inquiry $inquiry
  */
-abstract class InquiryFactor extends Factor implements Contracts\TrackedFactor
+abstract class InquiryFactor extends Factor
 {
-    use Concerns\Tracked;
-
-    /** @var Contracts\Inquiry $subject */
+    /** @var Inquiry $subject */
     protected $subject;
 
     public function serialize()
@@ -23,7 +23,7 @@ abstract class InquiryFactor extends Factor implements Contracts\TrackedFactor
     }
 
     /**
-     * @return Contracts\Inquiry
+     * @return Inquiry
      */
     public function inquiry()
     {

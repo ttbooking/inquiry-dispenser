@@ -1,15 +1,15 @@
 <?php
 
-namespace TTBooking\InquiryDispenser\Concerns;
+namespace TTBooking\InquiryDispenser\Subjects;
 
-use DateTimeInterface as DateTime;
+use DateTimeInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
-use TTBooking\InquiryDispenser\Contracts;
-use TTBooking\InquiryDispenser\Factor;
+use TTBooking\InquiryDispenser\Contracts\Subjects\Subject as SubjectContract;
+use TTBooking\InquiryDispenser\Contracts\Factors\Factor;
 use TTBooking\InquiryDispenser\Reduce;
 
-trait Parameterized
+abstract class Subject implements SubjectContract
 {
     /** @var string[] $factors */
     protected $factors = [];                            // alias => class
@@ -29,14 +29,11 @@ trait Parameterized
     /** @var mixed $defaultTraitValue */
     protected $defaultTraitValue = 0;
 
-    /** @var string $filter */
-    protected static $filter = '';
-
     /**
-     * @param DateTime|null $queryTime
-     * @return Collection|Contracts\Factor[]
+     * @param DateTimeInterface|null $queryTime
+     * @return Collection|Factor[]
      */
-    public function factors(DateTime $queryTime = null)
+    public function factors(DateTimeInterface $queryTime = null)
     {
         return collect($this->factors)->map(function ($factor) use ($queryTime) {
             return new $factor($this, $queryTime);
@@ -45,10 +42,10 @@ trait Parameterized
 
     /**
      * @param string $name
-     * @param DateTime|null $queryTime
-     * @return Contracts\Factor
+     * @param DateTimeInterface|null $queryTime
+     * @return Factor
      */
-    public function factor($name, DateTime $queryTime = null)
+    public function factor($name, DateTimeInterface $queryTime = null)
     {
         return $this->factors($queryTime)[$name];
     }
@@ -81,35 +78,7 @@ trait Parameterized
         return collect(array_intersect_key($defaults, $traits) + array_fill_keys(array_keys($traits), $this->defaultTraitValue));
     }
 
-    /**
-     * @return Collection|static[]
-     */
-    protected static function all()
-    {
-        return collect();
-    }
-
-    /**
-     * @return Collection|static[]
-     */
-    public static function applicable()
-    {
-        return static::all()->filter(function (self $subject) {
-            return $subject->is(static::$filter);
-        });
-    }
-
-    public static function checkout()
-    {
-        foreach (static::all() as $inquiry) $inquiry->fireFactorEvents();
-    }
-
-    public function fireFactorEvents()
-    {
-        foreach ($this->factors() as $factor) $factor->checkout();
-    }
-
-    final public function was($factors, DateTime $queryTime = null)
+    final public function was($factors, DateTimeInterface $queryTime = null)
     {
         return array_reduce((array)$factors, function ($was, $_factor) use ($queryTime) {
             $inv = $_factor !== ($factor = ltrim($_factor, '!'));
@@ -119,7 +88,7 @@ trait Parameterized
         }, true);
     }
 
-    final public function getAsOf($traits, DateTime $queryTime = null)
+    final public function getAsOf($traits, DateTimeInterface $queryTime = null)
     {
         if (empty($traits)) $traits = $this->traits()->keys();
 

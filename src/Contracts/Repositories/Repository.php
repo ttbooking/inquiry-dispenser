@@ -1,6 +1,6 @@
 <?php
 
-namespace TTBooking\InquiryDispenser\Contracts;
+namespace TTBooking\InquiryDispenser\Contracts\Repositories;
 
 use TTBooking\InquiryDispenser\Exceptions\ItemNotFoundException;
 
@@ -11,10 +11,10 @@ interface Repository
      * @return mixed
      * @throws ItemNotFoundException
      */
-    function get($id);
+    public function get($id);
 
     /**
      * @return array
      */
-    function all();
+    public function all();
 }

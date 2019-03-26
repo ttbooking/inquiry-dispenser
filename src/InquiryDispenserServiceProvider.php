@@ -22,8 +22,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Factor::setEventDispatcher($this->app['events']);
-        Factor::observe(Observers\TrackFactorState::class);
+        Factors\Factor::setEventDispatcher($this->app['events']);
 
         if ($this->app->runningInConsole()) {
 
@@ -32,10 +31,15 @@ class InquiryDispenserServiceProvider extends ServiceProvider
                 /** @var Schedule $schedule */
                 $schedule = $this->app->make(Schedule::class);
 
-                $event = $schedule->command('dispenser:dispense')->withoutOverlapping();
-                config('dispenser.schedule', function (Event $event) {
-                    $event->everyMinute();
-                })($event);
+                $checkout = $schedule->command('dispenser:checkout')->withoutOverlapping();
+                config('dispenser.schedule.checkout', function (Event $checkout) {
+                    $checkout->everyMinute();
+                })($checkout);
+
+                $dispense = $schedule->command('dispenser:dispense')->withoutOverlapping();
+                config('dispenser.schedule.dispense', function (Event $dispense) {
+                    $dispense->everyMinute();
+                })($dispense);
 
             });
 
@@ -53,19 +57,17 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Contracts\MatchRepository::class, MatchRepository::class);
+        $this->app->singleton('command.dispenser.checkout', function () {
+            return new Console\CheckoutCommand;
+        });
 
         $this->app->singleton('command.dispenser.dispense', function () {
             return new Console\DispenseCommand;
         });
 
-        $this->app->singleton('command.dispenser.track-table', function ($app) {
-            return new Console\TrackTableCommand($app['files'], $app['composer']);
-        });
-
         $this->commands([
+            'command.dispenser.checkout',
             'command.dispenser.dispense',
-            'command.dispenser.track-table',
         ]);
     }
 
@@ -77,8 +79,8 @@ class InquiryDispenserServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
+            'command.dispenser.checkout',
             'command.dispenser.dispense',
-            'command.dispenser.track-table',
         ];
     }
 }

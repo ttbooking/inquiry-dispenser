@@ -3,8 +3,8 @@
 namespace TTBooking\InquiryDispenser\Console;
 
 use Illuminate\Console\Command;
-use TTBooking\InquiryDispenser\Contracts\InquiryRepository;
-use TTBooking\InquiryDispenser\Match;
+use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
+use TTBooking\InquiryDispenser\Subjects\Match;
 
 class DispenseCommand extends Command
 {

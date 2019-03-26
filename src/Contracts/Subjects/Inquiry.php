@@ -1,33 +1,33 @@
 <?php
 
-namespace TTBooking\InquiryDispenser\Contracts;
+namespace TTBooking\InquiryDispenser\Contracts\Subjects;
 
-interface Inquiry extends Identifiable
+interface Inquiry extends Subject, Identifiable
 {
     /**
      * @return \DateTimeInterface
      */
-    function getDateTime();
+    public function getDateTime();
 
     /**
      * @param Operator $operator
      * @return void
      */
-    function bind($operator);
+    public function bind($operator);
 
     /**
      * @return void
      */
-    function unbind();
+    public function unbind();
 
     /**
      * @return Operator|null
      */
-    function bound();
+    public function bound();
 
     /**
      * @param Operator $operator
      * @return Match
      */
-    function match($operator);
+    public function match($operator);
 }

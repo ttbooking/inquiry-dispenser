@@ -1,24 +1,24 @@
 <?php
 
-namespace TTBooking\InquiryDispenser\Contracts;
+namespace TTBooking\InquiryDispenser\Contracts\Subjects;
 
 use Illuminate\Support\Collection;
 
-interface Parameterizable
+interface Subject
 {
     /**
-     * Test parameterizable object factor activity.
+     * Test subject factor activity.
      *
      * @param string|string[] ...$factors
      * @return bool
      */
-    function is(...$factors);
+    public function is(...$factors);
 
     /**
-     * Get parameterizable object trait(s).
+     * Get subject trait(s).
      *
      * @param string[]|string ...$traits
      * @return Collection|mixed[]|mixed
      */
-    function get(...$traits);
+    public function get(...$traits);
 }

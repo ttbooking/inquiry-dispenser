@@ -1,9 +1,12 @@
 <?php
 
-namespace TTBooking\InquiryDispenser;
+namespace TTBooking\InquiryDispenser\Factors;
 
-use DateTimeInterface as DateTime;
+use DateTimeInterface;
 use Illuminate\Support\Facades\Cache;
+use TTBooking\InquiryDispenser\Concerns\HasEvents;
+use TTBooking\InquiryDispenser\Contracts\Factors\Factor as FactorContract;
+use TTBooking\InquiryDispenser\Contracts\Subjects\Subject;
 
 /**
  * Class Factor
@@ -11,21 +14,21 @@ use Illuminate\Support\Facades\Cache;
  *
  * @property-read bool $active
  */
-abstract class Factor implements Contracts\Factor, \ArrayAccess
+abstract class Factor implements FactorContract
 {
-    use Concerns\HasEvents;
+    use HasEvents;
 
-    /** @var Contracts\Parameterizable $subject */
+    /** @var Subject $subject */
     protected $subject;
 
-    /** @var DateTime|null $queryTime */
+    /** @var DateTimeInterface|null $queryTime */
     protected $queryTime;
 
     /**
-     * @param Contracts\Parameterizable $subject
-     * @param DateTime|null $queryTime
+     * @param Subject $subject
+     * @param DateTimeInterface|null $queryTime
      */
-    public function __construct(Contracts\Parameterizable $subject, DateTime $queryTime = null)
+    public function __construct(Subject $subject, DateTimeInterface $queryTime = null)
     {
         $this->subject = $subject;
         $this->setQueryTime($queryTime);
@@ -61,7 +64,7 @@ abstract class Factor implements Contracts\Factor, \ArrayAccess
         return isset($this->queryTime) ? $this->queryTime : date_create();
     }
 
-    final public function setQueryTime(DateTime $queryTime = null)
+    final public function setQueryTime(DateTimeInterface $queryTime = null)
     {
         $this->queryTime = $queryTime;
         return $this;
