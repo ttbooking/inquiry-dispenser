@@ -7,6 +7,11 @@ use Illuminate\Support\Collection;
 interface Subject
 {
     /**
+     * @return Collection|static[]
+     */
+    public static function all();
+
+    /**
      * Test subject factor activity.
      *
      * @param string|string[] ...$factors

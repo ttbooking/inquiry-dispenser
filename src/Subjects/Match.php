@@ -6,8 +6,6 @@ use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Match as MatchContract;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Inquiry;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Operator;
-use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
-use TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository;
 
 class Match extends Subject implements MatchContract
 {
@@ -50,19 +48,8 @@ class Match extends Subject implements MatchContract
      */
     public static function all()
     {
-        /** @var Collection|Inquiry[] $inquiries */
-        $inquiries = app(InquiryRepository::class)->all()
-            ->filter(function (Inquiry $inquiry) {
-                return $inquiry->is(config('dispenser.narrowers.inquiry'));
-            })
-            ->sortMultiple(config('dispenser.ordering.inquiry'));
-
-        /** @var Collection|Operator[] $operators */
-        $operators = app(OperatorRepository::class)->all()
-            ->filter(function (Operator $operator) {
-                return $operator->is(config('dispenser.narrowers.operator'));
-            })
-            ->sortMultiple(config('dispenser.ordering.operator'));
+        $inquiries = Inquiry::all();
+        $operators = Operator::all();
 
         return $inquiries->crossJoin($operators)
             ->map(function (array $match) {
