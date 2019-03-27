@@ -19,7 +19,7 @@ class CollectionMacroServiceProvider extends ServiceProvider
             })
             ->each(function ($macro) {
                 $class = __NAMESPACE__.'\\Macros\\'.$macro;
-                Collection::macro(Str::camel($macro), $this->app->call($class));
+                Collection::macro(Str::camel($macro), $this->app->call($class, [], '__invoke'));
             });
     }
 }

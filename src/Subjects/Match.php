@@ -4,8 +4,8 @@ namespace TTBooking\InquiryDispenser\Subjects;
 
 use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Match as MatchContract;
-use TTBooking\InquiryDispenser\Contracts\Subjects\Inquiry;
-use TTBooking\InquiryDispenser\Contracts\Subjects\Operator;
+use TTBooking\InquiryDispenser\Subjects\Inquiry;
+use TTBooking\InquiryDispenser\Subjects\Operator;
 
 class Match extends Subject implements MatchContract
 {

@@ -32,14 +32,14 @@ class InquiryDispenserServiceProvider extends ServiceProvider
                 $schedule = $this->app->make(Schedule::class);
 
                 $checkout = $schedule->command('dispenser:checkout')->withoutOverlapping();
-                config('dispenser.schedule.checkout', function (Event $checkout) {
+                call_user_func(config('dispenser.schedule.checkout', function (Event $checkout) {
                     $checkout->everyMinute();
-                })($checkout);
+                }), $checkout);
 
                 $dispense = $schedule->command('dispenser:dispense')->withoutOverlapping();
-                config('dispenser.schedule.dispense', function (Event $dispense) {
+                call_user_func(config('dispenser.schedule.dispense', function (Event $dispense) {
                     $dispense->everyMinute();
-                })($dispense);
+                }), $dispense);
 
             });
 
