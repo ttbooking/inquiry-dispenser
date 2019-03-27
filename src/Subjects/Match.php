@@ -21,6 +21,7 @@ class Match extends Subject implements MatchContract
     {
         $this->inquiry = $inquiry;
         $this->operator = $operator;
+        parent::__construct();
     }
 
     public function getId()
@@ -53,20 +54,24 @@ class Match extends Subject implements MatchContract
         $inquiries = app(InquiryRepository::class)->all()
             ->filter(function (Inquiry $inquiry) {
                 return $inquiry->is(config('dispenser.narrowers.inquiry'));
-            });
+            })
+            ->sortMultiple(config('dispenser.ordering.inquiry'));
 
         /** @var Collection|Operator[] $operators */
         $operators = app(OperatorRepository::class)->all()
             ->filter(function (Operator $operator) {
                 return $operator->is(config('dispenser.narrowers.operator'));
-            });
+            })
+            ->sortMultiple(config('dispenser.ordering.operator'));
 
         return $inquiries->crossJoin($operators)
             ->map(function (array $match) {
                 return new static($match[0], $match[1]);
-            })->filter(function (self $match) {
+            })
+            ->filter(function (self $match) {
                 return $match->is(config('dispenser.narrowers.match'));
-            });
+            })
+            ->sortMultiple(config('dispenser.ordering.match'));
     }
 
     final public function marry()

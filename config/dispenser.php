@@ -20,4 +20,10 @@ return [
         'match' => 'valid',
     ],
 
+    'ordering' => [
+        'inquiry' => ['weight', SORT_DESC],
+        'operator' => ['inquiryCount'],
+        'match' => ['latestBindingTimestamp', SORT_DESC],
+    ],
+
 ];
