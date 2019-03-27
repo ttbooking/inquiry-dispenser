@@ -57,6 +57,10 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        foreach (config('dispenser.repositories') as $abstract => $concrete) {
+            $this->app->singleton($abstract, $concrete);
+        }
+
         $this->app->singleton('command.dispenser.checkout', function () {
             return new Console\CheckoutCommand;
         });

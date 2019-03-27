@@ -2,6 +2,11 @@
 
 return [
 
+    'repositories' => [
+        \TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository::class => '',
+        \TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository::class => '',
+    ],
+
     'schedule' => [
 
         'checkout' => function (\Illuminate\Console\Scheduling\Event $checkout) {
