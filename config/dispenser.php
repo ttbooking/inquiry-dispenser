@@ -3,8 +3,16 @@
 return [
 
     'repositories' => [
-        \TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository::class => '',
-        \TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository::class => '',
+
+        \TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository::class =>
+            \App\InquiryDispenser\Repositories\InquiryRepository::class,
+
+        \TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository::class =>
+            \App\InquiryDispenser\Repositories\OperatorRepository::class,
+
+        \TTBooking\InquiryDispenser\Contracts\Repositories\MatchRepository::class =>
+            \App\InquiryDispenser\Repositories\MatchRepository::class,
+
     ],
 
     'schedule' => [
@@ -21,7 +29,7 @@ return [
 
     'narrowers' => [
         'inquiry' => '!bound',
-        'operator' => 'free',
+        'operator' => ['!busy', 'online', 'ready'],
         'match' => 'valid',
     ],
 

@@ -13,16 +13,6 @@ use Illuminate\Support\Collection;
  */
 class SortMultiple
 {
-    protected static function prepareOrdering(array $ordering, $prefix = '')
-    {
-        return array_reduce(array_keys($ordering), function ($prepared, $id) use ($ordering, $prefix) {
-            $element = $ordering[$id];
-            if (is_string($id) && is_array($element)) $element = static::prepareOrdering($element, $id);
-            if (is_string($element) && !empty($prefix)) $element = "$prefix.$element";
-            return array_merge($prepared, (array)$element);
-        }, []);
-    }
-
     public function __invoke()
     {
         return function ($ordering) {

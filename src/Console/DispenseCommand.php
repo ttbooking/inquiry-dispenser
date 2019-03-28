@@ -28,6 +28,6 @@ class DispenseCommand extends Command
      */
     public function handle()
     {
-        foreach (Match::all() as $match) $match->marry();
+        while (!is_null($match = Match::all()->shift())) $match->marry();
     }
 }

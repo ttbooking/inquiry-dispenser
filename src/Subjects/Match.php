@@ -4,6 +4,7 @@ namespace TTBooking\InquiryDispenser\Subjects;
 
 use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Match as MatchContract;
+use TTBooking\InquiryDispenser\Contracts\Repositories\MatchRepository;
 use TTBooking\InquiryDispenser\Subjects\Inquiry;
 use TTBooking\InquiryDispenser\Subjects\Operator;
 
@@ -43,19 +44,13 @@ class Match extends Subject implements MatchContract
         return $this->operator;
     }
 
-    /**
-     * @return Collection|static[]
-     */
     public static function all()
     {
-        $inquiries = Inquiry::all();
-        $operators = Operator::all();
+        /** @var Collection|Match[] $matches */
+        $matches = app(MatchRepository::class)->all();
 
-        return $inquiries->crossJoin($operators)
-            ->map(function (array $match) {
-                return new static($match[0], $match[1]);
-            })
-            ->filter(function (self $match) {
+        return $matches
+            ->filter(function (Match $match) {
                 return $match->is(config('dispenser.narrowers.match'));
             })
             ->sortMultiple(config('dispenser.ordering.match'));

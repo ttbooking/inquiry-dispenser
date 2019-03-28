@@ -87,9 +87,9 @@ abstract class Subject implements SubjectContract
     {
         return array_reduce((array)$factors, function ($was, $_factor) use ($queryTime) {
             $inv = $_factor !== ($factor = ltrim($_factor, '!'));
-            return $inv xor $was
-                && array_key_exists($factor, $this->factors())
-                && $this->factor($factor, $queryTime)->active();
+            return $was
+                && array_key_exists($factor, $this->factors()->all())
+                && ($inv xor $this->factor($factor, $queryTime)->active());
         }, true);
     }
 
