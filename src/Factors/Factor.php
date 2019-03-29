@@ -32,7 +32,7 @@ abstract class Factor implements FactorContract
     {
         $this->subject = $subject;
         $this->setQueryTime($queryTime);
-        $this->checkout();
+        //$this->checkout();
     }
 
     public function active()

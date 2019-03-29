@@ -31,7 +31,7 @@ abstract class Subject implements SubjectContract
 
     public function __construct()
     {
-        $this->factors();
+        //$this->factors();
     }
 
     /**
@@ -53,6 +53,17 @@ abstract class Subject implements SubjectContract
     public function factor($name, DateTimeInterface $queryTime = null)
     {
         return $this->factors($queryTime)[$name];
+    }
+
+    /**
+     * @param DateTimeInterface|null $queryTime
+     * @return void
+     */
+    public function checkout(DateTimeInterface $queryTime = null)
+    {
+        foreach ($this->factors($queryTime) as $factor) {
+            $factor->checkout();
+        }
     }
 
     /**
