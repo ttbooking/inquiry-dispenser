@@ -4,7 +4,7 @@ namespace TTBooking\InquiryDispenser;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Console\Scheduling\Event;
+use TTBooking\InquiryDispenser\Contracts\Schedule as ScheduleContract;
 
 class InquiryDispenserServiceProvider extends ServiceProvider
 {
@@ -32,14 +32,14 @@ class InquiryDispenserServiceProvider extends ServiceProvider
                 $schedule = $this->app->make(Schedule::class);
 
                 $checkout = $schedule->command('dispenser:checkout')->withoutOverlapping();
-                call_user_func(config('dispenser.schedule.checkout', function (Event $checkout) {
-                    $checkout->everyMinute();
-                }), $checkout);
+                if ($this->app->bound(ScheduleContract::class)) {
+                    $this->app->make(ScheduleContract::class)->checkout($checkout);
+                }
 
                 $dispense = $schedule->command('dispenser:dispense')->withoutOverlapping();
-                call_user_func(config('dispenser.schedule.dispense', function (Event $dispense) {
-                    $dispense->everyMinute();
-                }), $dispense);
+                if ($this->app->bound(ScheduleContract::class)) {
+                    $this->app->make(ScheduleContract::class)->dispense($dispense);
+                }
 
             });
 

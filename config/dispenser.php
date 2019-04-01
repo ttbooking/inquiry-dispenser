@@ -1,29 +1,18 @@
 <?php
 
+use TTBooking\InquiryDispenser\Contracts;
+
 return [
 
     'repositories' => [
 
-        \TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository::class =>
-            \App\InquiryDispenser\Repositories\InquiryRepository::class,
+        //Contracts\Repositories\InquiryRepository::class => TODO: bind repository,
 
-        \TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository::class =>
-            \App\InquiryDispenser\Repositories\OperatorRepository::class,
+        //Contracts\Repositories\OperatorRepository::class => TODO: bind repository,
 
-        \TTBooking\InquiryDispenser\Contracts\Repositories\MatchRepository::class =>
-            \App\InquiryDispenser\Repositories\MatchRepository::class,
+        //Contracts\Repositories\MatchRepository::class => TODO: bind repository,
 
-    ],
-
-    'schedule' => [
-
-        'checkout' => function (\Illuminate\Console\Scheduling\Event $checkout) {
-            $checkout->everyMinute();
-        },
-
-        'dispense' => function (\Illuminate\Console\Scheduling\Event $dispense) {
-            $dispense->everyMinute();
-        },
+        //Contracts\Schedule::class => TODO: bind schedule,
 
     ],
 
