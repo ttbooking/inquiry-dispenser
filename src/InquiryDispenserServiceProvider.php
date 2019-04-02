@@ -63,9 +63,9 @@ class InquiryDispenserServiceProvider extends ServiceProvider
     public function register()
     {
         foreach ([
-            'dispenser.repository.inquiry' => InquiryRepository::class,
-            'dispenser.repository.operator' => OperatorRepository::class,
-            'dispenser.repository.match' => MatchRepository::class,
+            'dispenser.inquiry.repository' => InquiryRepository::class,
+            'dispenser.operator.repository' => OperatorRepository::class,
+            'dispenser.match.repository' => MatchRepository::class,
             'dispenser.schedule' => ScheduleContract::class,
         ] as $alias => $abstract) {
             $this->app->alias($abstract, $alias);

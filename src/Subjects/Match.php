@@ -4,7 +4,6 @@ namespace TTBooking\InquiryDispenser\Subjects;
 
 use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Match as MatchContract;
-use TTBooking\InquiryDispenser\Contracts\Repositories\MatchRepository;
 use TTBooking\InquiryDispenser\Subjects\Inquiry;
 use TTBooking\InquiryDispenser\Subjects\Operator;
 
@@ -47,13 +46,13 @@ class Match extends Subject implements MatchContract
     public static function all()
     {
         /** @var Collection|Match[] $matches */
-        $matches = app(MatchRepository::class)->all();
+        $matches = app('dispenser.match.repository')->all();
 
         return $matches
             ->filter(function (Match $match) {
-                return $match->is(config('dispenser.narrowers.match'));
+                return $match->is(config('dispenser.match.filtering'));
             })
-            ->sortMultiple(config('dispenser.ordering.match'));
+            ->sortMultiple(config('dispenser.match.ordering'));
     }
 
     final public function marry()

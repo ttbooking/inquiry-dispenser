@@ -5,20 +5,19 @@ namespace TTBooking\InquiryDispenser\Subjects;
 use Serializable;
 use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Inquiry as InquiryContract;
-use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
 
 abstract class Inquiry extends Subject implements InquiryContract, Serializable
 {
     public static function all()
     {
         /** @var Collection|Inquiry[] $inquiries */
-        $inquiries = app(InquiryRepository::class)->all();
+        $inquiries = app('dispenser.inquiry.repository')->all();
 
         return $inquiries
             ->filter(function (Inquiry $inquiry) {
-                return $inquiry->is(config('dispenser.narrowers.inquiry'));
+                return $inquiry->is(config('dispenser.inquiry.filtering'));
             })
-            ->sortMultiple(config('dispenser.ordering.inquiry'));
+            ->sortMultiple(config('dispenser.inquiry.ordering'));
     }
 
     public function serialize()
