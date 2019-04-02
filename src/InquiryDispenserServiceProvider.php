@@ -69,7 +69,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
             'dispenser.schedule' => ScheduleContract::class,
         ] as $alias => $abstract) {
             $this->app->alias($abstract, $alias);
-            $this->app->singleton($alias, config($alias));
+            $this->app->singleton($abstract, config($alias));
         }
 
         $this->app->singleton('command.dispenser.checkout', function () {
