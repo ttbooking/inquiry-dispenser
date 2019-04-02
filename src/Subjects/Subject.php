@@ -178,4 +178,9 @@ abstract class Subject implements SubjectContract
             return $this->get($name);
         }
     }
+
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->traits()->all());
+    }
 }

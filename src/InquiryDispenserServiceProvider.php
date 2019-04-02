@@ -31,14 +31,16 @@ class InquiryDispenserServiceProvider extends ServiceProvider
                 /** @var Schedule $schedule */
                 $schedule = $this->app->make(Schedule::class);
 
-                $checkout = $schedule->command('dispenser:checkout')->withoutOverlapping();
                 if ($this->app->bound(ScheduleContract::class)) {
-                    $this->app->make(ScheduleContract::class)->checkout($checkout);
+                    $this->app->make(ScheduleContract::class)->checkout(
+                        $schedule->command('dispenser:checkout')->withoutOverlapping()
+                    );
                 }
 
-                $dispense = $schedule->command('dispenser:dispense')->withoutOverlapping();
                 if ($this->app->bound(ScheduleContract::class)) {
-                    $this->app->make(ScheduleContract::class)->dispense($dispense);
+                    $this->app->make(ScheduleContract::class)->dispense(
+                        $schedule->command('dispenser:dispense')->withoutOverlapping()
+                    );
                 }
 
             });
