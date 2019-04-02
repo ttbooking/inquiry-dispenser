@@ -4,6 +4,9 @@ namespace TTBooking\InquiryDispenser;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
+use TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository;
+use TTBooking\InquiryDispenser\Contracts\Repositories\MatchRepository;
 use TTBooking\InquiryDispenser\Contracts\Schedule as ScheduleContract;
 
 class InquiryDispenserServiceProvider extends ServiceProvider
@@ -59,8 +62,14 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        foreach (config('dispenser.repositories') as $abstract => $concrete) {
-            $this->app->singleton($abstract, $concrete);
+        foreach ([
+            'dispenser.repository.inquiry' => InquiryRepository::class,
+            'dispenser.repository.operator' => OperatorRepository::class,
+            'dispenser.repository.match' => MatchRepository::class,
+            'dispenser.schedule' => ScheduleContract::class,
+        ] as $alias => $abstract) {
+            $this->app->alias($abstract, $alias);
+            $this->app->singleton($alias, config($alias));
         }
 
         $this->app->singleton('command.dispenser.checkout', function () {
