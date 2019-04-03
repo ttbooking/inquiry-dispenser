@@ -10,7 +10,7 @@ trait HasEvents
     protected $events = [];
 
     /** @var array $observables */
-    protected $observables = [];
+    protected static $observables = [];
 
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
@@ -23,11 +23,9 @@ trait HasEvents
      */
     public static function observe($class)
     {
-        $instance = new static;
-
         $className = is_string($class) ? $class : get_class($class);
 
-        foreach ($instance->getObservableEvents() as $event) {
+        foreach (static::getObservableEvents() as $event) {
             if (method_exists($class, $event)) {
                 static::registerFactorEvent($event, $className.'@'.$event);
             }
@@ -37,11 +35,11 @@ trait HasEvents
     /**
      * @return array
      */
-    public function getObservableEvents()
+    public static function getObservableEvents()
     {
         return array_merge(
             ['activating', 'activated', 'deactivating', 'deactivated'],
-            $this->observables
+            static::$observables
         );
     }
 
@@ -49,21 +47,19 @@ trait HasEvents
      * @param array $observables
      * @return $this
      */
-    public function setObservableEvents(array $observables)
+    public static function setObservableEvents(array $observables)
     {
-        $this->observables = $observables;
-
-        return $this;
+        static::$observables = $observables;
     }
 
     /**
      * @param array|mixed $observables
      * @return void
      */
-    public function addObservableEvents($observables)
+    public static function addObservableEvents($observables)
     {
-        $this->observables = array_unique(array_merge(
-            $this->observables, is_array($observables) ? $observables : func_get_args()
+        static::$observables = array_unique(array_merge(
+            static::$observables, is_array($observables) ? $observables : func_get_args()
         ));
     }
 
@@ -71,10 +67,10 @@ trait HasEvents
      * @param array|mixed $observables
      * @return void
      */
-    public function removeObservableEvents($observables)
+    public static function removeObservableEvents($observables)
     {
-        $this->observables = array_diff(
-            $this->observables, is_array($observables) ? $observables : func_get_args()
+        static::$observables = array_diff(
+            static::$observables, is_array($observables) ? $observables : func_get_args()
         );
     }
 
@@ -196,9 +192,7 @@ trait HasEvents
             return;
         }
 
-        $instance = new static;
-
-        foreach ($instance->getObservableEvents() as $event) {
+        foreach (static::getObservableEvents() as $event) {
             static::$dispatcher->forget("dispenser.factor.{$event}: ".static::class);
         }
     }
