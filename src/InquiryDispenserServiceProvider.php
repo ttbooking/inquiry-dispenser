@@ -34,14 +34,14 @@ class InquiryDispenserServiceProvider extends ServiceProvider
                 /** @var Schedule $schedule */
                 $schedule = $this->app->make(Schedule::class);
 
-                if ($this->app->bound(ScheduleContract::class)) {
-                    $this->app->make(ScheduleContract::class)->checkout(
+                if ($this->app->bound('dispenser.schedule')) {
+                    $this->app->make('dispenser.schedule')->checkout(
                         $schedule->command('dispenser:checkout')->withoutOverlapping()
                     );
                 }
 
-                if ($this->app->bound(ScheduleContract::class)) {
-                    $this->app->make(ScheduleContract::class)->dispense(
+                if ($this->app->bound('dispenser.schedule')) {
+                    $this->app->make('dispenser.schedule')->dispense(
                         $schedule->command('dispenser:dispense')->withoutOverlapping()
                     );
                 }
@@ -67,9 +67,9 @@ class InquiryDispenserServiceProvider extends ServiceProvider
             'dispenser.operator.repository' => OperatorRepository::class,
             'dispenser.match.repository' => MatchRepository::class,
             'dispenser.schedule' => ScheduleContract::class,
-        ] as $alias => $abstract) {
+        ] as $alias => $abstract) if (!is_null($concrete = config($alias))) {
             $this->app->alias($abstract, $alias);
-            $this->app->singleton($abstract, config($alias));
+            $this->app->singleton($abstract, $concrete);
         }
 
         $this->app->singleton('command.dispenser.checkout', function () {
