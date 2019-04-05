@@ -19,43 +19,6 @@ class InquiryDispenserServiceProvider extends ServiceProvider
     protected $defer = true;
 
     /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Factors\Factor::setEventDispatcher($this->app['events']);
-
-        if ($this->app->runningInConsole()) {
-
-            $this->app->booted(function () {
-
-                /** @var Schedule $schedule */
-                $schedule = $this->app->make(Schedule::class);
-
-                if ($this->app->bound('dispenser.schedule')) {
-                    $this->app->make('dispenser.schedule')->checkout(
-                        $schedule->command('dispenser:checkout')->withoutOverlapping()
-                    );
-                }
-
-                if ($this->app->bound('dispenser.schedule')) {
-                    $this->app->make('dispenser.schedule')->dispense(
-                        $schedule->command('dispenser:dispense')->withoutOverlapping()
-                    );
-                }
-
-            });
-
-            $this->publishes([
-                __DIR__.'/../config/dispenser.php' => $this->app->configPath('dispenser.php'),
-            ], 'dispenser:config');
-
-        }
-    }
-
-    /**
      * Register the service provider.
      *
      * @return void
@@ -84,6 +47,22 @@ class InquiryDispenserServiceProvider extends ServiceProvider
             'command.dispenser.checkout',
             'command.dispenser.dispense',
         ]);
+
+        if ($this->app->runningInConsole()) {
+
+            $this->app->resolving(Schedule::class, function (Schedule $schedule) {
+                if ($this->app->bound('dispenser.schedule')) {
+                    $this->app->make('dispenser.schedule')
+                        ->checkout($schedule->command('dispenser:checkout')->withoutOverlapping())
+                        ->dispense($schedule->command('dispenser:dispense')->withoutOverlapping());
+                }
+            });
+
+            $this->publishes([
+                __DIR__.'/../config/dispenser.php' => $this->app->configPath('dispenser.php'),
+            ], 'dispenser:config');
+
+        }
     }
 
     /**
@@ -96,6 +75,11 @@ class InquiryDispenserServiceProvider extends ServiceProvider
         return [
             'command.dispenser.checkout',
             'command.dispenser.dispense',
+            'dispenser.inquiry.repository',
+            'dispenser.operator.repository',
+            'dispenser.match.repository',
+            'dispenser.schedule',
+            Schedule::class,
         ];
     }
 }

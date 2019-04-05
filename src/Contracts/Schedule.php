@@ -8,13 +8,13 @@ interface Schedule
 {
     /**
      * @param Event $checkout
-     * @return void
+     * @return $this
      */
     public function checkout(Event $checkout);
 
     /**
      * @param Event $dispense
-     * @return void
+     * @return $this
      */
     public function dispense(Event $dispense);
 }
