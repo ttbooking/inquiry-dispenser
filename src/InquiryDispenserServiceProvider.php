@@ -68,7 +68,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
                     $dispenserSchedule = $this->app->make('dispenser.schedule');
                     foreach (get_class_methods($dispenserSchedule) as $command) {
                         $dispenserSchedule->$command(
-                            $schedule->command('dispenser:'.Str::kebab($command))->withoutOverlapping()
+                            $schedule->command('dispenser:'.Str::kebab($command))
                         );
                     }
                 }

@@ -2,10 +2,9 @@
 
 namespace TTBooking\InquiryDispenser\Console;
 
-use Illuminate\Console\Command;
 use TTBooking\InquiryDispenser\Subjects\Match;
 
-class DispenseCommand extends Command
+class DispenseCommand extends MutexCommand
 {
     /**
      * The console command name.
@@ -22,11 +21,25 @@ class DispenseCommand extends Command
     protected $description = 'Dispense incoming user inquiries across operators';
 
     /**
+     * Force exclusive lock on console command.
+     *
+     * @var bool
+     */
+    protected $forceExclusive = true;
+
+    /**
+     * Default console command lock expiration timeout in minutes.
+     *
+     * @var int
+     */
+    protected $defaultLockTimeout = 5;
+
+    /**
      * Execute the console command.
      *
      * @return void
      */
-    public function handle()
+    public function handleExclusive()
     {
         while (!is_null($match = Match::all()->shift())) $match->marry();
     }
