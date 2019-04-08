@@ -2,6 +2,7 @@
 
 namespace TTBooking\InquiryDispenser;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
@@ -19,42 +20,57 @@ class InquiryDispenserServiceProvider extends ServiceProvider
     protected $defer = true;
 
     /**
+     * Implementations provided by the service provider.
+     *
+     * @var array
+     */
+    protected $provides = [
+        'dispenser.inquiry.repository'  => InquiryRepository::class,
+        'dispenser.operator.repository' => OperatorRepository::class,
+        'dispenser.match.repository'    => MatchRepository::class,
+        'dispenser.schedule'            => ScheduleContract::class,
+    ];
+
+    /**
+     * Console commands provided by the service provider.
+     *
+     * @var array
+     */
+    protected $commands = [
+        'command.dispenser.checkout'    => Console\CheckoutCommand::class,
+        'command.dispenser.dispense'    => Console\DispenseCommand::class,
+    ];
+
+    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        foreach ([
-            'dispenser.inquiry.repository' => InquiryRepository::class,
-            'dispenser.operator.repository' => OperatorRepository::class,
-            'dispenser.match.repository' => MatchRepository::class,
-            'dispenser.schedule' => ScheduleContract::class,
-        ] as $alias => $abstract) if (!is_null($concrete = config($alias))) {
-            $this->app->alias($abstract, $alias);
-            $this->app->singleton($abstract, $concrete);
+        foreach ($this->provides as $alias => $abstract) {
+            if (!is_null($concrete = config($alias))) {
+                $this->app->alias($abstract, $alias);
+                $this->app->singleton($abstract, $concrete);
+            }
         }
 
-        $this->app->singleton('command.dispenser.checkout', function () {
-            return new Console\CheckoutCommand;
-        });
+        foreach ($this->commands as $alias => $command) {
+            $this->app->singleton($alias, $command);
+        }
 
-        $this->app->singleton('command.dispenser.dispense', function () {
-            return new Console\DispenseCommand;
-        });
-
-        $this->commands([
-            'command.dispenser.checkout',
-            'command.dispenser.dispense',
-        ]);
+        $this->commands(array_keys($this->commands));
 
         if ($this->app->runningInConsole()) {
 
             $this->app->resolving(Schedule::class, function (Schedule $schedule) {
                 if ($this->app->bound('dispenser.schedule')) {
-                    $this->app->make('dispenser.schedule')
-                        ->checkout($schedule->command('dispenser:checkout')->withoutOverlapping())
-                        ->dispense($schedule->command('dispenser:dispense')->withoutOverlapping());
+                    $dispenserSchedule = $this->app->make('dispenser.schedule');
+                    foreach (get_class_methods($dispenserSchedule) as $command) {
+                        $dispenserSchedule->$command(
+                            $schedule->command('dispenser:'.Str::kebab($command))->withoutOverlapping()
+                        );
+                    }
                 }
             });
 
@@ -72,14 +88,16 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [
-            'command.dispenser.checkout',
-            'command.dispenser.dispense',
-            'dispenser.inquiry.repository',
-            'dispenser.operator.repository',
-            'dispenser.match.repository',
-            'dispenser.schedule',
-            Schedule::class,
-        ];
+        return array_merge(
+
+            array_filter(array_keys($this->provides), function ($alias) {
+                return !is_null(config($alias));
+            }),
+
+            array_keys($this->commands),
+
+            [Schedule::class]
+
+        );
     }
 }
