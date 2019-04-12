@@ -4,11 +4,11 @@ namespace TTBooking\InquiryDispenser;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
 use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
 use TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository;
-use TTBooking\InquiryDispenser\Contracts\Repositories\MatchRepository;
-use TTBooking\InquiryDispenser\Contracts\Schedule as ScheduleContract;
+use TTBooking\InquiryDispenser\Contracts\Subjects\Match;
+use TTBooking\InquiryDispenser\Contracts\Schedule;
 
 class InquiryDispenserServiceProvider extends ServiceProvider
 {
@@ -25,10 +25,10 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      * @var array
      */
     protected $provides = [
-        'dispenser.inquiry.repository'  => InquiryRepository::class,
-        'dispenser.operator.repository' => OperatorRepository::class,
-        'dispenser.match.repository'    => MatchRepository::class,
-        'dispenser.schedule'            => ScheduleContract::class,
+        'dispenser.repository.inquiry'  => InquiryRepository::class,
+        'dispenser.repository.operator' => OperatorRepository::class,
+        'dispenser.match'               => [Match::class, false],
+        'dispenser.schedule'            => Schedule::class,
     ];
 
     /**
@@ -48,10 +48,11 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        foreach ($this->provides as $alias => $abstract) {
+        foreach ($this->provides as $alias => $def) {
+            list($abstract, $shared) = array_pad((array) $def, 2, true);
             if (!is_null($concrete = config($alias))) {
                 $this->app->alias($abstract, $alias);
-                $this->app->singleton($abstract, $concrete);
+                $this->app->bind($abstract, $concrete, $shared);
             }
         }
 
@@ -63,7 +64,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
 
-            $this->app->resolving(Schedule::class, function (Schedule $schedule) {
+            $this->app->resolving(ConsoleSchedule::class, function (ConsoleSchedule $schedule) {
                 if ($this->app->bound('dispenser.schedule')) {
                     $dispenserSchedule = $this->app->make('dispenser.schedule');
                     foreach (get_class_methods($dispenserSchedule) as $command) {
@@ -96,7 +97,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
 
             array_keys($this->commands),
 
-            [Schedule::class]
+            [ConsoleSchedule::class]
 
         );
     }

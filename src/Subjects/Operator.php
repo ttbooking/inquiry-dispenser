@@ -7,16 +7,16 @@ use TTBooking\InquiryDispenser\Contracts\Subjects\Operator as OperatorContract;
 
 abstract class Operator extends Subject implements OperatorContract
 {
-    public static function all()
+    public static function all($forDispense = false)
     {
         /** @var Collection|Operator[] $operators */
-        $operators = app('dispenser.operator.repository')->all();
+        $operators = app('dispenser.repository.operator')->all();
 
-        return $operators
+        return !$forDispense ? $operators : $operators
             ->filter(function (Operator $operator) {
-                return $operator->is(config('dispenser.operator.filtering'));
+                return $operator->is(config('dispenser.matching.operator.filtering'));
             })
-            ->sortMultiple(config('dispenser.operator.ordering'));
+            ->sortMultiple(config('dispenser.matching.operator.ordering'));
     }
 
     abstract public function ready($ready);

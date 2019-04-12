@@ -7,9 +7,10 @@ use Illuminate\Support\Collection;
 interface Subject
 {
     /**
+     * @param bool $forDispense
      * @return Collection|static[]
      */
-    public static function all();
+    public static function all($forDispense = false);
 
     /**
      * Test subject factor activity.

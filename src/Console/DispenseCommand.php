@@ -41,6 +41,6 @@ class DispenseCommand extends MutexCommand
      */
     public function handleExclusive()
     {
-        while (!is_null($match = Match::all()->shift())) $match->marry();
+        while (!is_null($match = Match::all(true)->shift())) $match->marry();
     }
 }

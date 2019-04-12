@@ -43,16 +43,24 @@ class Match extends Subject implements MatchContract
         return $this->operator;
     }
 
-    public static function all()
+    public static function all($forDispense = false)
     {
-        /** @var Collection|Match[] $matches */
-        $matches = app('dispenser.match.repository')->all();
+        /** @var Collection|Inquiry[] $inquiries */
+        $inquiries = Inquiry::all($forDispense);
 
-        return $matches
+        /** @var Collection|Operator[] $operators */
+        $operators = Operator::all($forDispense);
+
+        $matches = $inquiries->crossJoin($operators)
+            ->map(function (array $match) {
+                return app('dispenser.match', array_combine(['inquiry', 'operator'], $match));
+            });
+
+        return !$forDispense ? $matches : $matches
             ->filter(function (Match $match) {
-                return $match->is(config('dispenser.match.filtering'));
+                return $match->is(config('dispenser.matching.match.filtering'));
             })
-            ->sortMultiple(config('dispenser.match.ordering'));
+            ->sortMultiple(config('dispenser.matching.match.ordering'));
     }
 
     final public function marry()

@@ -8,16 +8,16 @@ use TTBooking\InquiryDispenser\Contracts\Subjects\Inquiry as InquiryContract;
 
 abstract class Inquiry extends Subject implements InquiryContract, Serializable
 {
-    public static function all()
+    public static function all($forDispense = false)
     {
         /** @var Collection|Inquiry[] $inquiries */
-        $inquiries = app('dispenser.inquiry.repository')->all();
+        $inquiries = app('dispenser.repository.inquiry')->all();
 
-        return $inquiries
+        return !$forDispense ? $inquiries : $inquiries
             ->filter(function (Inquiry $inquiry) {
-                return $inquiry->is(config('dispenser.inquiry.filtering'));
+                return $inquiry->is(config('dispenser.matching.inquiry.filtering'));
             })
-            ->sortMultiple(config('dispenser.inquiry.ordering'));
+            ->sortMultiple(config('dispenser.matching.inquiry.ordering'));
     }
 
     public function serialize()
