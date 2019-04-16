@@ -2,7 +2,7 @@
 
 namespace TTBooking\InquiryDispenser\Contracts\Subjects;
 
-interface Match extends Subject, Identifiable
+interface Match extends Subject
 {
     /**
      * @return void

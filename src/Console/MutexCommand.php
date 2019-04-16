@@ -78,7 +78,8 @@ abstract class MutexCommand extends Command
         $event = new MutexEvent($mutex, $this->getName());
         $event->withoutOverlapping($this->getLockTimeout());
         if ($this->isExclusive() ? !$mutex->create($event) : $mutex->exists($event)) {
-            throw (new MutexLockException('Command already running'))->setEvent($event);
+            //throw (new MutexLockException('Command already running'))->setEvent($event);
+            return;
         }
 
         $this->laravel->call([$this, 'handleExclusive']);

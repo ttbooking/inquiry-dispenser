@@ -17,7 +17,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = true;
+    //protected $defer = true;
 
     /**
      * Implementations provided by the service provider.

@@ -2,7 +2,7 @@
 
 namespace TTBooking\InquiryDispenser\Contracts\Subjects;
 
-interface Inquiry extends Subject, Identifiable
+interface Inquiry extends Subject
 {
     /**
      * @return \DateTimeInterface

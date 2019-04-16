@@ -2,9 +2,9 @@
 
 namespace TTBooking\InquiryDispenser\Contracts\Subjects;
 
-use Illuminate\Support\Collection;
+use TTBooking\InquiryDispenser\Support\Collection;
 
-interface Subject
+interface Subject extends Identifiable
 {
     /**
      * @param bool $forDispense

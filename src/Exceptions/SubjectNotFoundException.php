@@ -2,4 +2,4 @@
 
 namespace TTBooking\InquiryDispenser\Exceptions;
 
-class ClassMismatchException extends \Exception {}
+class SubjectNotFoundException extends \Exception {}

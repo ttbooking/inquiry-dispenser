@@ -2,20 +2,21 @@
 
 namespace TTBooking\InquiryDispenser\Contracts\Repositories;
 
-use Illuminate\Support\Collection;
-use TTBooking\InquiryDispenser\Exceptions\ItemNotFoundException;
+use TTBooking\InquiryDispenser\Support\Collection;
+use TTBooking\InquiryDispenser\Contracts\Subjects\Subject;
+use TTBooking\InquiryDispenser\Exceptions\SubjectNotFoundException;
 
 interface Repository
 {
     /**
      * @param mixed $id
-     * @return mixed
-     * @throws ItemNotFoundException
+     * @return Subject
+     * @throws SubjectNotFoundException
      */
     public function get($id);
 
     /**
-     * @return Collection
+     * @return Collection|Subject[]
      */
     public function all();
 }
