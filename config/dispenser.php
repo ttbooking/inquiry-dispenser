@@ -68,4 +68,15 @@ return [
 
     //'schedule' => TODO: bind schedule,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Maximum inquiry batch size
+    |--------------------------------------------------------------------------
+    |
+    | Maximum batch size for matching with operators.
+    |
+    */
+
+    'batch' => env('DISP_BATCH', 50),
+
 ];

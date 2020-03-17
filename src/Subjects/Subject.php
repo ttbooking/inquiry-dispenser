@@ -5,6 +5,7 @@ namespace TTBooking\InquiryDispenser\Subjects;
 use DateTimeInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Subject as SubjectContract;
 use TTBooking\InquiryDispenser\Contracts\Factors\Factor;
 use TTBooking\InquiryDispenser\Reduce;
@@ -167,13 +168,18 @@ abstract class Subject implements SubjectContract
 
     public function __call($name, array $arguments)
     {
-        if (1 === preg_match('/^is(\w+)/', $name, $matches)) {
-            return $this->is(lcfirst($matches[1]));
+        if (1 === preg_match('/^is(\w+)/', $name, $matches)
+            && array_key_exists($factor = Str::snake($matches[1]), $this->factors)) {
+            return $this->is($factor);
         }
     }
 
     public function __get($name)
     {
+        if (1 === preg_match('/^is(\w+)/', $name, $matches)
+            && array_key_exists($factor = Str::snake($matches[1]), $this->factors)) {
+            return $this->is($factor);
+        }
         if (array_key_exists($name, $this->traits()->all())) {
             return $this->get($name);
         }
@@ -181,6 +187,9 @@ abstract class Subject implements SubjectContract
 
     public function __isset($name)
     {
-        return array_key_exists($name, $this->traits()->all());
+        return
+            1 === preg_match('/^is(\w+)/', $name, $matches)
+            && array_key_exists($factor = Str::snake($matches[1]), $this->factors)
+            || array_key_exists($name, $this->traits()->all());
     }
 }

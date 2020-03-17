@@ -43,8 +43,8 @@ class CheckoutCommand extends MutexCommand
      */
     public function handleExclusive()
     {
-        foreach (Inquiry::all() as $inquiry) $inquiry->checkout();
-        foreach (Operator::all() as $operator) $operator->checkout();
-        foreach (Match::all() as $match) $match->checkout();
+        //foreach (Inquiry::all() as $inquiry) $inquiry->checkout();
+        //foreach (Operator::all() as $operator) $operator->checkout();
+        //foreach (Match::all() as $match) $match->checkout();
     }
 }
