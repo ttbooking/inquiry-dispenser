@@ -6,6 +6,7 @@ use TTBooking\InquiryDispenser\Contracts\Subjects\Inquiry;
 
 /**
  * @property-read Inquiry $inquiry
+ * @property-read int $currentWeightIncrement
  */
 abstract class InquiryFactor extends Factor
 {
