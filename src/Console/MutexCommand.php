@@ -5,8 +5,8 @@ namespace TTBooking\InquiryDispenser\Console;
 use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Console\Command;
-use Illuminate\Console\Scheduling\Mutex;
-use Illuminate\Console\Scheduling\CacheMutex;
+use Illuminate\Console\Scheduling\EventMutex;
+use Illuminate\Console\Scheduling\CacheEventMutex;
 use TTBooking\InquiryDispenser\Support\MutexEvent;
 use TTBooking\InquiryDispenser\Exceptions\MutexLockException;
 
@@ -71,9 +71,9 @@ abstract class MutexCommand extends Command
      */
     public function handle(Container $container)
     {
-        $mutex = $container->bound(Mutex::class)
-            ? $container->make(Mutex::class)
-            : $container->make(CacheMutex::class);
+        $mutex = $container->bound(EventMutex::class)
+            ? $container->make(EventMutex::class)
+            : $container->make(CacheEventMutex::class);
 
         $event = new MutexEvent($mutex, $this->getName());
         $event->withoutOverlapping($this->getLockTimeout());
