@@ -3,9 +3,9 @@
 namespace TTBooking\InquiryDispenser\Subjects;
 
 use TTBooking\InquiryDispenser\Support\Collection;
-use TTBooking\InquiryDispenser\Contracts\Subjects\Match as MatchContract;
+use TTBooking\InquiryDispenser\Contracts\Subjects\IOMatch as IOMatchContract;
 
-class Match extends Subject implements MatchContract
+class IOMatch extends Subject implements IOMatchContract
 {
     /** @var Inquiry $inquiry */
     protected $inquiry;
@@ -55,7 +55,7 @@ class Match extends Subject implements MatchContract
             });
 
         return !$forDispense ? $matches : $matches
-            ->filter(function (Match $match) {
+            ->filter(function (IOMatch $match) {
                 return $match->is(config('dispenser.matching.match.filtering'));
             })
             ->sortMultiple(config('dispenser.matching.match.ordering'));

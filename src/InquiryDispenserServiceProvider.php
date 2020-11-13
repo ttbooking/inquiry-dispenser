@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
 use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;
 use TTBooking\InquiryDispenser\Contracts\Repositories\OperatorRepository;
-use TTBooking\InquiryDispenser\Contracts\Subjects\Match;
+use TTBooking\InquiryDispenser\Contracts\Subjects\IOMatch;
 use TTBooking\InquiryDispenser\Contracts\Schedule;
 
 class InquiryDispenserServiceProvider extends ServiceProvider
@@ -27,7 +27,7 @@ class InquiryDispenserServiceProvider extends ServiceProvider
     protected $provides = [
         'dispenser.repository.inquiry'  => InquiryRepository::class,
         'dispenser.repository.operator' => OperatorRepository::class,
-        'dispenser.match'               => [Match::class, false],
+        'dispenser.match'               => [IOMatch::class, false],
         'dispenser.schedule'            => Schedule::class,
     ];
 

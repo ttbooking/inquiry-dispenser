@@ -4,7 +4,7 @@ namespace TTBooking\InquiryDispenser\Console;
 
 use TTBooking\InquiryDispenser\Subjects\Inquiry;
 use TTBooking\InquiryDispenser\Subjects\Operator;
-use TTBooking\InquiryDispenser\Subjects\Match;
+use TTBooking\InquiryDispenser\Subjects\IOMatch;
 
 class CheckoutCommand extends MutexCommand
 {
@@ -45,6 +45,6 @@ class CheckoutCommand extends MutexCommand
     {
         //foreach (Inquiry::all() as $inquiry) $inquiry->checkout();
         //foreach (Operator::all() as $operator) $operator->checkout();
-        //foreach (Match::all() as $match) $match->checkout();
+        //foreach (IOMatch::all() as $match) $match->checkout();
     }
 }

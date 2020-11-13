@@ -2,7 +2,7 @@
 
 namespace TTBooking\InquiryDispenser\Console;
 
-use TTBooking\InquiryDispenser\Subjects\Match;
+use TTBooking\InquiryDispenser\Subjects\IOMatch;
 
 class DispenseCommand extends MutexCommand
 {
@@ -41,6 +41,6 @@ class DispenseCommand extends MutexCommand
      */
     public function handleExclusive()
     {
-        while (!is_null($match = Match::all(true)->shift())) $match->marry();
+        while (!is_null($match = IOMatch::all(true)->shift())) $match->marry();
     }
 }

@@ -20,7 +20,7 @@ interface Operator extends Subject
 
     /**
      * @param Inquiry $inquiry
-     * @return Match
+     * @return IOMatch
      */
     public function match($inquiry);
 

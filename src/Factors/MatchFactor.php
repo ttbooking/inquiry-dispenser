@@ -2,18 +2,18 @@
 
 namespace TTBooking\InquiryDispenser\Factors;
 
-use TTBooking\InquiryDispenser\Contracts\Subjects\Match;
+use TTBooking\InquiryDispenser\Contracts\Subjects\IOMatch;
 
 /**
- * @property-read Match $match
+ * @property-read IOMatch $match
  */
 abstract class MatchFactor extends Factor
 {
-    /** @var Match $subject */
+    /** @var IOMatch $subject */
     protected $subject;
 
     /**
-     * @return Match
+     * @return IOMatch
      */
     public function match()
     {

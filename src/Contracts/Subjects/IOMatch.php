@@ -2,7 +2,7 @@
 
 namespace TTBooking\InquiryDispenser\Contracts\Subjects;
 
-interface Match extends Subject
+interface IOMatch extends Subject
 {
     /**
      * @return void
