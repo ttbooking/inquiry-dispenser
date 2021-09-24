@@ -67,10 +67,8 @@ class InquiryDispenserServiceProvider extends ServiceProvider
             $this->app->resolving(ConsoleSchedule::class, function (ConsoleSchedule $schedule) {
                 if ($this->app->bound('dispenser.schedule')) {
                     $dispenserSchedule = $this->app->make('dispenser.schedule');
-                    foreach (get_class_methods($dispenserSchedule) as $command) {
-                        $dispenserSchedule->$command(
-                            $schedule->command('dispenser:'.Str::kebab($command))
-                        );
+                    foreach (get_class_methods($dispenserSchedule) as $action) {
+                        $dispenserSchedule->$action($schedule);
                     }
                 }
             });

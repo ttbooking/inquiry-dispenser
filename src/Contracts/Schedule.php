@@ -2,19 +2,19 @@
 
 namespace TTBooking\InquiryDispenser\Contracts;
 
-use Illuminate\Console\Scheduling\Event;
+use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
 
 interface Schedule
 {
     /**
-     * @param Event $checkout
+     * @param ConsoleSchedule $schedule
      * @return void
      */
-    public function checkout(Event $checkout);
+    public function checkout(ConsoleSchedule $schedule);
 
     /**
-     * @param Event $dispense
+     * @param ConsoleSchedule $schedule
      * @return void
      */
-    public function dispense(Event $dispense);
+    public function dispense(ConsoleSchedule $schedule);
 }
