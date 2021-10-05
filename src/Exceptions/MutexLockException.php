@@ -2,10 +2,9 @@
 
 namespace TTBooking\InquiryDispenser\Exceptions;
 
-use Exception;
 use Illuminate\Console\Scheduling\Event;
 
-class MutexLockException extends Exception
+class MutexLockException extends \RuntimeException
 {
     /**
      * Locking event object.

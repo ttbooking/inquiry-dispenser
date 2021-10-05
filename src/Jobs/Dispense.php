@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use TTBooking\InquiryDispenser\Exceptions\DispenseException;
 use TTBooking\InquiryDispenser\Subjects\IOMatch;
 
 class Dispense implements ShouldQueue, ShouldBeUnique
@@ -29,7 +30,11 @@ class Dispense implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        while (!is_null($match = IOMatch::all(true)->shift())) $match->marry();
+        try {
+            while (!is_null($match = IOMatch::all(true)->shift())) $match->marry();
+        } catch (\Throwable $e) {
+            throw new DispenseException('Dispense operation failed.', $e->getCode(), $e);
+        }
     }
 
     /**
