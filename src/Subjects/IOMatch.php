@@ -44,13 +44,15 @@ class IOMatch extends Subject implements IOMatchContract
     public static function all($forDispense = false)
     {
         $inquiries = Inquiry::all($forDispense);
-        while (!is_null($operator = Operator::all($forDispense)->shift())) {
+        $operators = Operator::all($forDispense);
+        while (!is_null($operator = $operators->shift())) {
             foreach ($inquiries as $key => $inquiry) {
                 if (!isset($inquiry)) continue;
                 $match = app('dispenser.match', compact('inquiry', 'operator'));
                 if ($match->is(config('dispenser.matching.match.filtering'))) {
                     yield $match;
                     unset($inquiries[$key]);
+                    $operators = Operator::all($forDispense);
                     break;
                 };
             }
