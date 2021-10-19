@@ -24,7 +24,7 @@ class Dispense implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         try {
-            while (!is_null($match = IOMatch::all(true)->shift())) $match->marry();
+            foreach (IOMatch::all(true) as $match) $match->marry();
         } catch (\Throwable $e) {
             throw new DispenseException('Dispense operation failed.', $e->getCode(), $e);
         }
