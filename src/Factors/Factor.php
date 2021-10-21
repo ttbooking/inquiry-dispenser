@@ -85,20 +85,24 @@ abstract class Factor implements FactorContract
         return $this->$name();
     }
 
+    #[\ReturnTypeWillChange]
     final public function offsetExists($offset)
     {
         return isset($this->$offset);
     }
 
+    #[\ReturnTypeWillChange]
     final public function offsetGet($offset)
     {
         return $this->$offset;
     }
 
+    #[\ReturnTypeWillChange]
     final public function offsetSet($offset, $value)
     {
     }
 
+    #[\ReturnTypeWillChange]
     final public function offsetUnset($offset)
     {
     }
