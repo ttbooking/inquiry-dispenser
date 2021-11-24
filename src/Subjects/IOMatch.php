@@ -43,20 +43,22 @@ class IOMatch extends Subject implements IOMatchContract
 
     public static function all($forDispense = false)
     {
+        /** @var Collection|Inquiry[] $inquiries */
         $inquiries = Inquiry::all($forDispense);
+
+        /** @var Collection|Operator[] $operators */
         $operators = Operator::all($forDispense);
-        while (!is_null($operator = $operators->shift())) {
-            foreach ($inquiries as $key => $inquiry) {
-                if (!isset($inquiry)) continue;
-                $match = app('dispenser.match', compact('inquiry', 'operator'));
-                if ($match->is(config('dispenser.matching.match.filtering'))) {
-                    yield $match;
-                    unset($inquiries[$key]);
-                    $operators = Operator::all($forDispense);
-                    break;
-                };
-            }
-        }
+
+        $matches = $inquiries->crossJoin($operators)
+            ->map(function (array $match) {
+                return app('dispenser.match', array_combine(['inquiry', 'operator'], $match));
+            });
+
+        return !$forDispense ? $matches : $matches
+            ->filter(function (IOMatch $match) {
+                return $match->is(config('dispenser.matching.match.filtering'));
+            })
+            ->sortMultiple(config('dispenser.matching.match.ordering'));
     }
 
     final public function marry()
