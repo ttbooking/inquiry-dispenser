@@ -77,17 +77,19 @@ return [
     |
     */
 
-    'batch' => env('DISP_BATCH', 50),
+    'batch_size' => env('DISP_BATCH_SIZE', 50),
 
     /*
     |--------------------------------------------------------------------------
-    | Limit batch entries by inquiry category
+    | Group entries by inquiry property
     |--------------------------------------------------------------------------
     |
-    | Maximum batch entry count for each inquiry category.
+    | Maximum entry count for each inquiry property value.
     |
     */
 
-    'limit_per_category' => env('CAT_LIMIT', 5),
+    'group_by' => env('DISP_GROUP_BY', false),
+
+    'group_limit' => env('DISP_GROUP_LIMIT', 5),
 
 ];

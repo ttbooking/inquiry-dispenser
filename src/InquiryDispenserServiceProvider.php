@@ -2,7 +2,6 @@
 
 namespace TTBooking\InquiryDispenser;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
 use TTBooking\InquiryDispenser\Contracts\Repositories\InquiryRepository;

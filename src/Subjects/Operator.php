@@ -2,8 +2,8 @@
 
 namespace TTBooking\InquiryDispenser\Subjects;
 
-use Illuminate\Support\Collection;
 use TTBooking\InquiryDispenser\Contracts\Subjects\Operator as OperatorContract;
+use TTBooking\InquiryDispenser\Support\Collection;
 
 abstract class Operator extends Subject implements OperatorContract
 {
