@@ -79,4 +79,15 @@ return [
 
     'batch' => env('DISP_BATCH', 50),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Limit batch entries by inquiry category
+    |--------------------------------------------------------------------------
+    |
+    | Maximum batch entry count for each inquiry category.
+    |
+    */
+
+    'limit_per_category' => env('CAT_LIMIT', 5),
+
 ];

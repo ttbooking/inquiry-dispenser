@@ -18,6 +18,7 @@ abstract class Inquiry extends Subject implements InquiryContract, Serializable
                 return $inquiry->is(config('dispenser.matching.inquiry.filtering'));
             })
             ->sortMultiple(config('dispenser.matching.inquiry.ordering'))
+            ->groupBy('categoryId')->map->take(config('dispenser.limit_per_category'))->collapse()
             ->take(config('dispenser.batch'));
     }
 
