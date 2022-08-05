@@ -2,10 +2,12 @@
 
 namespace TTBooking\InquiryDispenser\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\InquiryDispenser\Subjects\Inquiry;
 use TTBooking\InquiryDispenser\Subjects\Operator;
 use TTBooking\InquiryDispenser\Subjects\IOMatch;
 
+#[AsCommand(name: 'dispenser:checkout')]
 class CheckoutCommand extends MutexCommand
 {
     /**
@@ -14,6 +16,17 @@ class CheckoutCommand extends MutexCommand
      * @var string
      */
     protected $name = 'dispenser:checkout';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'dispenser:checkout';
 
     /**
      * The console command description.
